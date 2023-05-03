@@ -187,13 +187,18 @@ fun main() {
 //        window.add(ground)
 
         val player = Object("Player",
-            Vec2(),
+            Vec2(0.0, -200.0),
             Vec2(200.0, 200.0)
         )
         val realGround = Object(
             "Ground",
-            Vec2(window.width * -0.5, (window.height - 100).toDouble()),
-            Vec2(window.width.toDouble() * 2.0, 20.0)
+            Vec2(-800.0, 0.0),
+            Vec2(1600.0, 20.0)
+        )
+        val ground2 = Object(
+            "Ground",
+            Vec2(800.0, 0.0),
+            Vec2(1600.0, 20.0)
         )
         val a = Object("Thing",
             Vec2(window.width - 150.0, window.height - 200.0),
@@ -203,7 +208,7 @@ fun main() {
             Vec2(0.0, 0.0),
             Vec2(120.0, 220.0)
         )
-        val world = World(window, arrayOf(player, realGround, a, b))
+        val world = World(window, arrayOf(player, realGround, ground2, a, b))
 
 
         window.isVisible = true
@@ -241,11 +246,12 @@ fun main() {
                             when (newCollision(player, obstacle)) {
                                 Side.Top -> {
                                     grounded = true
-                                    val offset = obstacle.y() - (player.width() - 1.0 + player.y())
+                                    val offset = obstacle.y() - (player.height() - 1.0 + player.y())
                                     player.move(Vec2(0.0, offset))
                                 }
                                 Side.Bottom -> {
-
+                                    val offset = obstacle.y() + obstacle.height() - player.y()
+                                    player.move(Vec2(0.0, offset))
                                     vel.y = 0.0
                                 }
                                 Side.Left -> {
