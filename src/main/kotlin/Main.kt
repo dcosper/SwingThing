@@ -150,7 +150,7 @@ fun main() {
     UIManager.setLookAndFeel(FlatDarkLaf())
 
     JFrame().also {window ->
-        window.defaultCloseOperation= WindowConstants.EXIT_ON_CLOSE
+        window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         window.title = "Cool thing"
         window.setSize(1200, 700)
         window.layout = null
@@ -158,35 +158,30 @@ fun main() {
         val rootPane = window.rootPane
         rootPane.setLocation(100, 100)
 
-//        ground.setBounds(0, 0, window.width, 20)
-//        ground.setLocation(0, window.height - 100)
-//        window.add(ground)
-
         val player = Object("Player",
             Vec2(0.0, -200.0),
-            Vec2(200.0, 200.0)
+            Vec2(100.0, 100.0)
         )
         val realGround = Object(
             "Ground",
             Vec2(-800.0, 0.0),
-            Vec2(1600.0, 20.0)
+            Vec2(1600.0, 300.0)
         )
         val ground2 = Object(
             "Ground",
             Vec2(800.0, 0.0),
-            Vec2(1600.0, 20.0)
+            Vec2(1600.0, 300.0)
         )
         val a = Object("Thing",
-            Vec2(window.width - 150.0, window.height - 200.0),
+            Vec2(300.0, -120.0),
             Vec2(120.0, 120.0)
         )
         val b = Object("Thing",
-            Vec2(0.0, 0.0),
+            Vec2(500.0, -220.0),
             Vec2(120.0, 220.0)
         )
         val world = World(window, arrayOf(player, realGround, ground2, a, b))
         world.setCameraFocus(0)
-
 
         window.isVisible = true
 
