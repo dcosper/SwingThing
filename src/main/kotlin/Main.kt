@@ -5,13 +5,8 @@ import java.awt.event.KeyEvent
 import java.awt.event.WindowEvent
 import javax.swing.*
 import kotlin.math.*
-import kotlin.random.Random
 
 data class Vec2(var x: Double = 0.0, var y: Double = 0.0) {
-    constructor(point: Point): this() {
-        this.x = point.x.toDouble()
-        this.y = point.y.toDouble()
-    }
     operator fun plus(other: Vec2): Vec2 {
         return Vec2(this.x + other.x, this.y + other.y)
     }
@@ -79,39 +74,27 @@ class Object(text: String, private var pos: Vec2 = Vec2(), private var size: Vec
     }
 }
 
-class World(var window: JFrame, var objects: Array<Object>, private var camera: Vec2 = Vec2()) {
+class World(private var window: JFrame, var objects: Array<Object>, private var camera: Vec2 = Vec2()) {
+    private var objectIndex = 0
     init {
         for (obj in this.objects) {
             obj.addTo(this.window)
         }
     }
 
-    fun setCameraPos(pos: Vec2) {
-        this.camera = pos
+    fun setCameraFocus(objectIndex: Int) {
+        this.objectIndex = objectIndex
     }
 
     fun update() {
-        this.camera = this.objects[0].pos() * -1.0
-        this.camera -= this.objects[0].size()/2.0
+        val focusedObject = this.objects[this.objectIndex]
+        this.camera = focusedObject.pos() * -1.0
+        this.camera -= focusedObject.size()/2.0
         this.camera += Vec2(window.width/2.0, window.height/2.0)
         for (obj in this.objects) {
             obj.update(this.camera)
         }
     }
-}
-
-var camera = Vec2()
-fun move(button: JButton, x: Int, y: Int) {
-    val pos = button.location
-    button.setLocation(pos.x + x + camera.x.toInt(), pos.y + y + camera.y.toInt())
-}
-
-fun moveRandom(button: JButton, window: JFrame) {
-    val maxX = window.width - button.width
-    val maxY = window.height - button.height
-    val x = Random.nextInt(maxX)
-    val y = Random.nextInt(maxY)
-    button.setLocation(x, y)
 }
 
 fun keyPressed(event: KeyEvent): Boolean {
@@ -131,13 +114,6 @@ fun applyFriction(xVel: Double, grounded: Boolean): Double {
     }
 
     return max(abs(xVel) - friction, 0.0) * sign(xVel)
-}
-
-fun colliding(a: JButton, b: JButton): Boolean {
-    return  a.x < b.x + b.width &&
-            a.x + a.width > b.x &&
-            a.y < b.y + b.height &&
-            a.height + a.y > b.y
 }
 
 enum class Side {
@@ -209,6 +185,7 @@ fun main() {
             Vec2(120.0, 220.0)
         )
         val world = World(window, arrayOf(player, realGround, ground2, a, b))
+        world.setCameraFocus(0)
 
 
         window.isVisible = true
