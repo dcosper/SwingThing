@@ -180,7 +180,11 @@ fun main() {
             Vec2(500.0, -220.0),
             Vec2(120.0, 220.0)
         )
-        val world = World(window, arrayOf(player, realGround, ground2, a, b))
+        val ceiling = Object("Ceiling",
+            Vec2(-700.0, -600.0),
+            Vec2(1000.0, 300.0)
+        )
+        val world = World(window, arrayOf(player, realGround, ground2, a, b, ceiling))
         world.setCameraFocus(0)
 
         window.isVisible = true
@@ -217,14 +221,18 @@ fun main() {
                         if (colliding) {
                             when (newCollision(player, obstacle)) {
                                 Side.Top -> {
-                                    grounded = true
-                                    val offset = obstacle.y() - (player.height() - 1.0 + player.y())
-                                    player.move(Vec2(0.0, offset))
+                                    if (vel.y >= 0) {
+                                        grounded = true
+                                        val offset = obstacle.y() - (player.height() + player.y())
+                                        player.move(Vec2(0.0, offset))
+                                    }
                                 }
                                 Side.Bottom -> {
-                                    val offset = obstacle.y() + obstacle.height() - player.y()
-                                    player.move(Vec2(0.0, offset))
-                                    vel.y = 0.0
+                                    if (vel.y <= 0) {
+                                        val offset = obstacle.y() + obstacle.height() - player.y()
+                                        player.move(Vec2(0.0, offset))
+                                        vel.y = 0.0
+                                    }
                                 }
                                 Side.Left -> {
                                     val offset = obstacle.x() - (player.x() + player.width())
