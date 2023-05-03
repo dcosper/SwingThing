@@ -1,6 +1,7 @@
 import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.KeyboardFocusManager
 import java.awt.Point
+import java.awt.Rectangle
 import java.awt.event.KeyEvent
 import java.awt.event.WindowEvent
 import javax.swing.*
@@ -184,6 +185,11 @@ fun main() {
             Vec2(-700.0, -600.0),
             Vec2(1000.0, 300.0)
         )
+
+        val slider = JSlider()
+        slider.bounds = Rectangle(0, 0, 300, 20)
+        window.add(slider)
+
         val world = World(window, arrayOf(player, realGround, ground2, a, b, ceiling))
         world.setCameraFocus(0)
 
